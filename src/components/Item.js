@@ -17,9 +17,7 @@ function Item({ item }) {
     <>
       <div className={styles.wrap}>
         <div className={styles.img_item}>
-          {image_link && (
-            <Image src={image_link} alt={name} width={150} height={150} />
-          )}
+          <Image src={image_link} alt={name} width={150} height={150} />
         </div>
         <div className={styles.info_item}>
           <strong className={styles.tit_item}>{name}</strong>
