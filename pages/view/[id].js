@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Item from '../../src/components/Item';
 import Loading from '../../src/components/Loader';
 
-function About({ item }) {
+function About({ item, name }) {
   return (
     item && (
       <>
@@ -11,6 +11,7 @@ function About({ item }) {
           <title>{item.name}</title>
           <meta name="description" content={item.description} />
         </Head>
+        {name} 환경 입니다.
         <Item item={item} />
       </>
     )
@@ -27,6 +28,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       item: data,
+      name: process.env.name,
     },
   };
 }

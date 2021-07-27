@@ -9,8 +9,7 @@ export default function Home() {
   const [list, setList] = useState([]);
   const [isLoading, setIsloading] = useState(true);
 
-  const API_URL =
-    'http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   async function getData() {
     try {
