@@ -1,53 +1,39 @@
 import axios from 'axios';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
 import { Divider, Header } from 'semantic-ui-react';
 import ItemList from '../src/components/ItemList';
-import Loading from '../src/components/Loader';
 
-export default function Home() {
-  const [list, setList] = useState([]);
-  const [isLoading, setIsloading] = useState(true);
-
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-  async function getData() {
-    try {
-      const { data } = await axios.get(API_URL);
-      console.log(data);
-      setList(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsloading(false);
-    }
-  }
-
-  useEffect(() => {
-    getData();
-  }, []);
-
+export default function Home({ list }) {
   return (
     <div>
       <Head>
         <title>Home | 용용</title>
         <meta name="description" content="용용" />
       </Head>
-      {isLoading && <Loading />}
-      {!isLoading && (
-        <>
-          <Header as="h3" style={{ paddingTop: 40 }}>
-            베스트 상품
-          </Header>
-          <Divider />
-          <ItemList list={list.slice(0, 9)} />
-          <Header as="h3" style={{ paddingTop: 40 }}>
-            신상품
-          </Header>
-          <Divider />
-          <ItemList list={list.slice(9)} />
-        </>
-      )}
+      <>
+        <Header as="h3" style={{ paddingTop: 40 }}>
+          베스트 상품
+        </Header>
+        <Divider />
+        <ItemList list={list.slice(0, 9)} />
+        <Header as="h3" style={{ paddingTop: 40 }}>
+          신상품
+        </Header>
+        <Divider />
+        <ItemList list={list.slice(9)} />
+      </>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const apiUrl = process.env.apiUrl;
+  const { data } = await axios.get(apiUrl);
+
+  return {
+    props: {
+      list: data,
+      name: process.env.name,
+    },
+  };
 }

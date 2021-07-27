@@ -10,7 +10,7 @@ function ItemList({ list }) {
         <Grid.Row>
           {list.map((item) => (
             <Grid.Column key={item.id}>
-              <Link href={`/view/${item.id}`}>
+              <Link href={`/detail/${item.id}`}>
                 <a>
                   <div className={style.wrap}>
                     <div className={style.img_item}>
