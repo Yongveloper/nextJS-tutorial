@@ -32,6 +32,7 @@ export default function Home() {
     <div>
       <Head>
         <title>Home | 용용</title>
+        <meta name="description" content="용용" />
       </Head>
       {isLoading && <Loading />}
       {!isLoading && (

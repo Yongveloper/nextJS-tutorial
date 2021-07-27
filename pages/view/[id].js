@@ -1,36 +1,32 @@
 import axios from 'axios';
-import { useRouter } from 'next/dist/client/router';
-import { useEffect, useState } from 'react';
+import Head from 'next/head';
 import Item from '../../src/components/Item';
 import Loading from '../../src/components/Loader';
 
-function About() {
-  const router = useRouter();
-  const { id } = router.query;
-
-  const [item, setItem] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-
-  const API_URL = `http://makeup-api.herokuapp.com/api/v1/products/${id}.json`;
-
-  async function getData() {
-    try {
-      const { data } = await axios.get(API_URL);
-      setItem(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if (id && id > 0) {
-      getData();
-    }
-  }, [id]);
-
-  return <>{isLoading ? <Loading /> : <Item item={item} />}</>;
+function About({ item }) {
+  return (
+    item && (
+      <>
+        <Head>
+          <title>{item.name}</title>
+          <meta name="description" content={item.description} />
+        </Head>
+        <Item item={item} />
+      </>
+    )
+  );
 }
 
 export default About;
+
+export async function getServerSideProps(context) {
+  const id = context.params.id;
+  const apiUrl = `http://makeup-api.herokuapp.com/api/v1/products/${id}.json`;
+  const { data } = await axios.get(apiUrl);
+
+  return {
+    props: {
+      item: data,
+    },
+  };
+}
