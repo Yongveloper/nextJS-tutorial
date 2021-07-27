@@ -1,9 +1,13 @@
 import axios from 'axios';
+import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import Item from '../../src/components/Item';
+import Loader from '../../src/components/Loader';
 
 function About({ item, name }) {
-  if (!item) return null;
+  const router = useRouter();
+  if (router.isFallback) return <Loader />;
+  // if (!item) return null;
 
   return (
     item && (
@@ -22,12 +26,21 @@ function About({ item, name }) {
 export default About;
 
 export async function getStaticPaths() {
+  const apiUrl = process.env.apiUrl;
+  const { data } = await axios.get(apiUrl);
   return {
-    paths: [
-      { params: { id: '740' } },
-      { params: { id: '730' } },
-      { params: { id: '728' } },
-    ],
+    // paths: [
+    //   { params: { id: '740' } },
+    //   { params: { id: '730' } },
+    //   { params: { id: '728' } },
+    // ],
+    paths: data.slice(0, 9).map((item) => {
+      return {
+        params: {
+          id: item.id.toString(),
+        },
+      };
+    }),
     fallback: true,
   };
 }
